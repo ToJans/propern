@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="POC.cs" />
+    <Compile Include="Math_operations.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Propern\Propern.csproj">

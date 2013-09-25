@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Diagnostics;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace Propern
@@ -13,6 +12,27 @@ namespace Propern
         public static GivenSpec<T> Given<T>(IEnumerable<T> Givens)
         {
             return new GivenSpec<T>(Givens);
+        }
+
+        public static GivenSpec<T> Given<T,A,B>(IEnumerable<A> Given_a, IEnumerable<B> Given_b, Func<A,B,T> zip )
+        {
+            var ab = Given_a.Zip(Given_b, (a, b) => zip(a,b));
+            return new GivenSpec<T>(ab);
+        }
+
+        public static GivenSpec<T> Given<T, A, B, C>(IEnumerable<A> Given_a, IEnumerable<B> Given_b, IEnumerable<C> Given_c, Func<A, B, C, T> zip)
+        {
+            var ab = Given_a.Zip(Given_b, (a, b) => new {a, b});
+            var abc = ab.Zip(Given_c, (t, c) => zip(t.a, t.b, c));
+            return new GivenSpec<T>(abc);
+        }
+
+        public static GivenSpec<T> Given<T, A, B, C, D>(IEnumerable<A> Given_a, IEnumerable<B> Given_b, IEnumerable<C> Given_c, IEnumerable<D> Given_d, Func<A, B, C, D, T> zip)
+        {
+            var ab = Given_a.Zip(Given_b, (a, b) => new { a, b });
+            var abc = ab.Zip(Given_c, (t, c) => new { t.a, t.b, c });
+            var abcd = abc.Zip(Given_d, (t, d) => zip(t.a, t.b, t.c, d));
+            return new GivenSpec<T>(abcd);
         }
 
         public class GivenSpec<T>
